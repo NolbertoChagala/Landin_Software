@@ -1,7 +1,6 @@
 {
   "name": "Historia del Software - Aplicación Web Progresiva",
   "short_name": "Software History",
-  "description": "Descubre cómo ha evolucionado el desarrollo de software a través de los años. Una experiencia educativa interactiva sobre la historia de la programación y la computación.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -9,36 +8,27 @@
   "background_color": "#ffffff",
   "theme_color": "#1e1e2e",
   "categories": ["education", "productivity"],
-  "screenshots": [
-    {
-      "src": "/screenshot-1280x720.svg",
-      "sizes": "1280x720",
-      "type": "image/svg+xml",
-      "form_factor": "wide",
-      "purpose": "any"
-    }
-  ],
   "icons": [
     {
-      "src": "/icon-192x192.svg",
+      "src": "/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/icon-512x512.svg",
+      "src": "/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/icon-192x192-maskable.svg",
+      "src": "/icon-192x192-maskable.png",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "maskable"
     },
     {
-      "src": "/icon-512x512-maskable.svg",
+      "src": "/icon-512x512-maskable.png",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "maskable"
@@ -51,11 +41,7 @@
       "description": "Explora las diferentes eras de la evolución del software",
       "url": "/?section=eras",
       "icons": [
-        {
-          "src": "/icon-192x192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
+        { "src": "/icon-192x192.png", "sizes": "192x192", "type": "image/png" }
       ]
     },
     {
@@ -64,11 +50,7 @@
       "description": "Visualiza el timeline interactivo de hitos importantes",
       "url": "/?section=timeline",
       "icons": [
-        {
-          "src": "/icon-192x192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
+        { "src": "/icon-192x192.png", "sizes": "192x192", "type": "image/png" }
       ]
     }
   ],

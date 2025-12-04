@@ -1,3 +1,10 @@
+#!/usr/bin/env node
+
+/**
+ * Script para crear iconos PNG básicos para PWA
+ * Este script crea iconos simples con gradiente
+ */
+
 const fs = require('fs');
 const path = require('path');
 
