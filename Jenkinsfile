@@ -3,11 +3,10 @@ pipeline {
 
     // Usa el NodeJS que configuraste en Jenkins
     tools {
-        nodejs "Node20" // ⚠️ Debe coincidir exactamente con el nombre que pusiste
+        nodejs "Node20" // ⚠️ Debe coincidir exactamente con el nombre que pusiste en Jenkins
     }
 
     environment {
-        // Puedes definir variables de entorno si las necesitas
         NODE_ENV = "production"
     }
 
@@ -29,22 +28,22 @@ pipeline {
 
         stage('Build') {
             steps {
-                // Construye la landing
-                sh 'npm run build'
+                // Construye la landing con npx para evitar problemas de PATH
+                sh 'npx vite build'
             }
         }
 
         stage('Archive') {
             steps {
                 // Guarda los archivos construidos como artefactos de Jenkins
-                archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: false
             }
         }
 
         stage('Deploy (Opcional)') {
             steps {
                 // Aquí puedes agregar el comando para copiar dist/ a tu servidor o Render
-                echo 'Aquí va el deploy si quieres automatizarlo'
+                echo 'Deploy opcional aquí'
             }
         }
     }
