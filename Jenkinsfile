@@ -2,14 +2,15 @@ pipeline {
     agent any
 
     tools {
-        nodejs "Node20" // Debe coincidir con el Node que configuraste en Jenkins
+        nodejs "Node20"
     }
 
     environment {
         NODE_ENV = "production"
-        // API Key de Render, almacenada como Credential en Jenkins
+        DOCKER_IMAGE = "nolbertochagala/landing:latest"  // Cambia a tu repo de Docker Hub
+        DOCKER_USERNAME = credentials('DOCKER_HUB_USER')  // Credenciales Jenkins
+        DOCKER_PASSWORD = credentials('DOCKER_HUB_PASS')
         RENDER_API_KEY = credentials('RENDER_API_KEY')
-        // Reemplaza con tu Service ID de Render
         RENDER_SERVICE_ID = "srv-d4opvb95pdvs73cuv8mg"
     }
 
@@ -33,30 +34,40 @@ pipeline {
             }
         }
 
-        stage('Archive') {
+        stage('Build Docker Image') {
             steps {
-                archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: false
+                sh "docker build -t ${DOCKER_IMAGE} ."
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                sh """
+                echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+                docker push ${DOCKER_IMAGE}
+                """
             }
         }
 
         stage('Deploy to Render') {
             steps {
-                echo 'Desplegando a Render... 🌐'
-                sh '''
-                curl -X POST "https://api.render.com/deploy/srv-${RENDER_SERVICE_ID}" \
+                echo 'Desplegando a Render usando la imagen Docker... 🌐'
+                sh """
+                curl -X POST "https://api.render.com/v1/services/${RENDER_SERVICE_ID}/deploys" \
                 -H "Authorization: Bearer ${RENDER_API_KEY}" \
-                -H "Accept: application/json"
-                '''
+                -H "Content-Type: application/json" \
+                -d '{"clearCache": true}'
+                """
             }
         }
     }
 
     post {
         success {
-            echo 'Build y Deploy completados correctamente 🎉'
+            echo 'Build, Docker y Deploy completados correctamente 🎉'
         }
         failure {
-            echo 'Hubo un error en el build o deploy ❌'
+            echo 'Hubo un error en el build, Docker o deploy ❌'
         }
     }
 }
