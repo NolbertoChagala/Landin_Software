@@ -2,11 +2,15 @@ pipeline {
     agent any
 
     tools {
-        nodejs "Node20"
+        nodejs "Node20" // Debe coincidir con el Node que configuraste en Jenkins
     }
 
     environment {
         NODE_ENV = "production"
+        // API Key de Render, almacenada como Credential en Jenkins
+        RENDER_API_KEY = credentials('RENDER_API_KEY')
+        // Reemplaza con tu Service ID de Render
+        RENDER_SERVICE_ID = "srv-d4opvb95pdvs73cuv8mg"
     }
 
     stages {
@@ -35,19 +39,24 @@ pipeline {
             }
         }
 
-        stage('Deploy (Opcional)') {
+        stage('Deploy to Render') {
             steps {
-                echo 'Deploy opcional aquí'
+                echo 'Desplegando a Render... 🌐'
+                sh '''
+                curl -X POST "https://api.render.com/deploy/srv-${RENDER_SERVICE_ID}" \
+                -H "Authorization: Bearer ${RENDER_API_KEY}" \
+                -H "Accept: application/json"
+                '''
             }
         }
     }
 
     post {
         success {
-            echo 'Build terminado correctamente 🎉'
+            echo 'Build y Deploy completados correctamente 🎉'
         }
         failure {
-            echo 'Hubo un error en el build ❌'
+            echo 'Hubo un error en el build o deploy ❌'
         }
     }
 }
