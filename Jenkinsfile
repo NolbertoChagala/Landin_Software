@@ -1,38 +1,43 @@
 pipeline {
-  agent any
+    agent any
 
-  tools {
-    nodejs 'Node20'      // <-- ESTE NOMBRE DEBE COINCIDIR CON LO QUE CONFIGURES EN JENKINS
-  }
-
-  stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
+    tools {
+        nodejs 'Node20' // Este nombre debe coincidir con lo que configuraste en Jenkins
     }
 
-    stage('Install') {
-      steps {
-        sh 'npm install'
-      }
+    stages {
+        stage('Checkout') {
+            steps {
+                // Esta línea indica que use el repositorio que configuraste en la UI de Jenkins
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        stage('Archive') {
+            steps {
+                archiveArtifacts artifacts: 'dist/**', fingerprint: true
+            }
+        }
     }
 
-    stage('Build') {
-      steps {
-        sh 'npm run build'
-      }
+    post {
+        success {
+            echo 'Build terminado con éxito!'
+        }
+        failure {
+            echo 'Error en el build'
+        }
     }
-
-    stage('Archive dist') {
-      steps {
-        archiveArtifacts artifacts: 'dist/**', fingerprint: true
-      }
-    }
-  }
-
-  post {
-    success { echo "🎉 Build completado y artefactos archivados" }
-    failure { echo "❌ El build falló" }
-  }
 }
